@@ -1,17 +1,70 @@
 <template>
    <div class="login_container"> 
        <div class="login_box">
+         <!-- 头像区 -->
          <div class="acatar_box">
            <img src="~assets/logo.png">
          </div>
+         <!-- 表单区 -->
+         <el-form label-width="0px" 
+         class="login_form" 
+         :model="LoginFrom"
+         :rules="loginFormRules"
+         ref="loginFormRef">
+           <!-- 用户名 -->
+           <el-form-item prop="username" >
+           <el-input prefix-icon="iconfont icon-user" v-model="LoginFrom.username"></el-input>
+         </el-form-item>
+              <!-- 密码 -->
+           <el-form-item prop="password">
+           <el-input prefix-icon="iconfont icon-3702mima" v-model="LoginFrom.password" 
+           type="password"></el-input>
+         </el-form-item>
+         <!-- 按钮部分 -->
+          <el-form-item class="btns">
+           <el-button type="primary" @click="login">登录</el-button>
+           <el-button type="info" @click="resetLoginForm">重置</el-button>
+         </el-form-item>
+         </el-form>
        </div>
    </div>
 </template>
 
 <script>
 export default {
+  methods:{
+    resetLoginForm(){
+      this.$refs.loginFormRef.resetFields()
+    },
+    login(){
+      this.$refs.loginFormRef.validate(async validate=>
+      {
+        if(!validate) return
+         const {data:res} = await this.$http.post('login',this.LoginFrom)
+          if (res.meta.status!==200) return this.$message.error('登陆失败')
+          this.$message.success('登陆成功')
+        }
+      )
+    }
+  },
+  data(){
+    return {
+      LoginFrom:{
+        username:'',
+        password:'',
+      },
+      loginFormRules:{
+        username:[ 
+           { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        password:[
+          { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 15, message: '长度在 6 到 15个字符', trigger: 'blur' }
+        ]
+      }
 
-}
+      }}}
 </script>
 
 <style lang="less" scoped>
@@ -47,4 +100,16 @@ export default {
           }
       }
   }
+  .btns{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .login_form{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
 </style>
