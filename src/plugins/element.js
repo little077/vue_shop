@@ -1,9 +1,5 @@
 import Vue from 'vue'
-import { Button } from 'element-ui'
-import { Form, FormItem } from 'element-ui'
-
-import 'element-ui/lib/theme-chalk/index.css';
-import Input from 'element-ui'
+import { Button ,Input,Form, FormItem} from 'element-ui'
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
