@@ -9,9 +9,14 @@ Vue.use(ElementUI);
 //导入基础样式
 import  'assets/css/global.css'
 import 'assets/fonts/iconfont.css'
-import { Form, Message } from 'element-ui'
+import {  Message } from 'element-ui'
 /**网络模块 */
 import axios from 'axios'
+axios.interceptors.request.use(config=>{
+/**为请求头对象，添加token验证的Authorization */
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/' 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
